@@ -3,11 +3,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from .models import Question
 from .models import Choice
+from django.utils import timezone
 
 # Create your views here.
 
 def index(request):
-    latest_question_list=Question.objects.order_by('-pub_date')[:5]
+    #latest_question_list=Question.objects.order_by('-pub_date')[:5]
+    latest_question_list = Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+
     #output = ', '.join([q.question_text for q in latest_question_list])
     context = {'latest_question_list' : latest_question_list}
     return render(request, 'polls/index.html', context)
